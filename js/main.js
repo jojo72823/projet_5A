@@ -40,6 +40,7 @@ function add_section() {
 function generate_graph() {
     add_section();
     alert("get_select_indicators");
+    
 
     //GET USERS_INDICATORS 
     select_nb_connection_users = $('select[name=nb_connection_users]').val();
