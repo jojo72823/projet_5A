@@ -23,39 +23,52 @@ var id_select_nb_messages_read_users;
 
 var data_indicator = new Array();
 
-$(document).ready(function () {
+var nb_graph = 0;
 
-    $('#MyButton').click(function () {
-        alert("get_select_indicators");
 
-        //GET USERS_INDICATORS 
-        select_nb_connection_users = $('select[name=nb_connection_users]').val();
-        select_nb_messages_sent_users = $('select[name=nb_messages_sent_users]').val();
-        select_nb_messages_read_users = $('select[name=nb_messages_read_users]').val();
+function add_section() {
 
-       //GET SELECT_INDICATORS
-        var checkbox = $(this).parent().children("table").children("tbody").children("tr").children("td").next("td").children("input");
-        var selects = $(this).parent().children("table").children("tbody").children("tr").next("tr").next("tr").next("tr").next("tr").next("tr").children("td").next("td").next("td").next("td").children("select");
-        for (var i = 0; i < selects.length; i++) {
-            var id_selected = selects[i].val();
+    nb_graph = nb_graph + 1;
+    document.getElementById('grid_graph').innerHTML += '<div class="demo-card-wide mdl-card mdl-shadow--2dp mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet">\n\
+ <div class=\'wrapper\'>\n\
+ <div id=\'container' + nb_graph + '\'></div>\n\
+ </div>\n\
+ </div>\n';
 
+}
+
+function generate_graph() {
+    add_section();
+    alert("get_select_indicators");
+
+    //GET USERS_INDICATORS 
+    select_nb_connection_users = $('select[name=nb_connection_users]').val();
+    select_nb_messages_sent_users = $('select[name=nb_messages_sent_users]').val();
+    select_nb_messages_read_users = $('select[name=nb_messages_read_users]').val();
+
+    //GET SELECT_INDICATORS
+    
+     var tableau = document.getElementById("table_param").children("tbody");
+     var checkbox = tableau.nodelist.children("tr").next("tr").childNodes;
+    
+    var selects = document.getElementById("table_param").children("tbody").children("tr").next("tr").next("tr").next("tr").next("tr").children("td").next("td").children("select");
+    
+    //var checkbox = $(this).parent().children("table").children("tbody").children("tr").children("td").next("td").children("input");
+   // var selects = $(this).parent().children("table").children("tbody").children("tr").next("tr").next("tr").next("tr").next("tr").next("tr").children("td").next("td").next("td").next("td").children("select");
+    for (var i = 0; i < selects.length; i++) {
+        var id_selected = selects[i].val();
+    }
+
+    select_indicators_new.length = 0;
+    for (var i = 0; i < checkbox.length; i++) {
+        if (checkbox[i].checked) {
+            select_indicators_new.push("true");
+        } else {
+            select_indicators_new.push("false");
         }
-        
-        select_indicators_new.length = 0;
-        for (var i = 0; i < checkbox.length; i++) {
-            if (checkbox[i].checked) {
-                select_indicators_new.push("true");
-            } else {
-                select_indicators_new.push("false");
-            }
-        }
-        pre_print_graph();
-    });
-
-
-
-});
-
+    }
+    pre_print_graph();
+}
 function moteur_calcul_indicateur() {
 
 
@@ -160,7 +173,7 @@ function moteur_calcul_indicateur() {
         },
         cache: false
     });
-    
+
     alert("id_recupéré");
 
     //get indicator for user
@@ -212,7 +225,6 @@ function moteur_calcul_indicateur() {
 
 
 }
-
 function pre_print_graph() {
 
     moteur_calcul_indicateur();
@@ -222,7 +234,7 @@ function pre_print_graph() {
     data_print.length = 0;
     data_indicator.length = 0;
     count = 0;
-   
+
     data_indicator.push(nb_messages_read);
     data_indicator.push(nb_messages_send);
     data_indicator.push(nb_files_upload);
@@ -241,9 +253,8 @@ function pre_print_graph() {
     print_graph();
 }
 
-
 function print_graph() {
-    Highcharts.chart('container', {
+    Highcharts.chart('container' + nb_graph, {
         chart: {
             polar: true
         },
@@ -291,3 +302,115 @@ function print_graph() {
     });
 }
 
+function graphique_comparaison_note() {
+    add_section();
+    Highcharts.chart('container' + nb_graph, {
+        title: {
+            text: 'Comparaison des notes'
+        },
+        xAxis: {
+            categories: ['élève 1', 'élève 2', 'élève 3', 'élève 4', 'élève 5'],
+        },
+        labels: {
+
+        },
+        yAxis: {
+            min: 0,
+            max: 20,
+            title: {
+                text: '/20'
+            }
+        },
+        series: [{
+                type: 'column',
+                name: 'Classe L2',
+                data: [20, 12, 10, 20, 13]
+            }, {max: 20,
+                type: 'spline',
+                name: 'Min',
+                data: [5, 5, 5, 5, 5],
+                marker: {
+                    lineWidth: 2,
+                    lineColor: Highcharts.getOptions().colors[3],
+                    fillColor: 'white'
+                }
+            }, {max: 20,
+                type: 'spline',
+                name: 'Max',
+                data: [15, 15, 15, 15, 15],
+                marker: {
+                    lineWidth: 2,
+                    lineColor: Highcharts.getOptions().colors[3],
+                    fillColor: 'white'
+                }
+            }, {
+                type: 'spline',
+                name: 'Moyenne',
+                data: [12, 12, 12, 12, 12],
+                marker: {
+                    lineWidth: 2,
+                    lineColor: Highcharts.getOptions().colors[3],
+                    fillColor: 'white'
+                }
+            }]
+    });
+}
+
+function graphique_comparaison_nb_co() {
+    add_section();
+    Highcharts.chart('container' + nb_graph, {
+        chart: {
+            type: 'column'
+        },
+        title: {
+            text: 'Nombre de connexion aux différents modules'
+        },
+        subtitle: {
+            text: ''
+        },
+        xAxis: {
+            categories: [
+                'Module 1',
+                'Module 2',
+                'Module 3',
+                'Module 4',
+                'Module 5'
+            ],
+            crosshair: true
+        },
+        yAxis: {
+            min: 0,
+            title: {
+                text: 'Nombre de connexion'
+            }
+        },
+        tooltip: {
+            headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+            pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                    '<td style="padding:0"><b>{point.y:.1f} mm</b></td></tr>',
+            footerFormat: '</table>',
+            shared: true,
+            useHTML: true
+        },
+        plotOptions: {
+            column: {
+                pointPadding: 0.2,
+                borderWidth: 0
+            }
+        },
+        series: [{
+                name: 'Promo 2015',
+                data: [48.9, 38.8, 39.3, 41.4, 47.0]
+
+            }, {
+                name: 'Promo 2016',
+                data: [83.6, 78.8, 98.5, 93.4, 57.0]
+
+            }, {
+                name: 'Promo 2017',
+                data: [49.9, 71.5, 106.4, 129.2, 144.0]
+
+
+            }]
+    });
+}

@@ -19,9 +19,10 @@
     <head>
         <meta charset="utf-8">
 
-        <title>Material Design Lite</title>
+        <title>TRAVIS</title>
+        <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-blue.min.css" />
 
-        <link rel="stylesheet" href="./mdl/material.min.css">
+        <link rel="stylesheet" href="css/monCss.css">
         <script src="./mdl/material.min.js"></script>
         <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
         <script type='text/javascript' src='https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js'></script>
@@ -46,16 +47,6 @@
                 color: white;
             }
         </style>
-
-        <!-- Accent-colored raised button with ripple -->
-        <!--        <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
-                    Button
-                </button>
-                <button class="mdl-button mdl-js-button mdl-button--fab mdl-button--colored">
-                    <i class="material-icons">add</i>
-                </button>-->
-
-
 
         <div class="mdl-layout mdl-js-layout mdl-layout--fixed-drawer
              mdl-layout--fixed-header">
@@ -87,100 +78,130 @@
 
             </div>
             <main class="mdl-layout__content">
-                <div class="page-content"> 
+                <div id="page_content" class="page-content"> 
+                    <div id="grid_graph" class="mdl-grid">
 
 
-
-                    <div class="mdl-grid">
-                        <div class="demo-card-wide mdl-card mdl-shadow--2dp mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet">
-                            <div class="mdl-card__title">
-                                <h2 class="mdl-card__title-text">Paramètres du graphique</h2>
-                            </div>
-                            <div>
-                                <table style="margin-right: auto;margin-left: auto;">
-                                    <tr >
-                                        <td>NB_MESSAGES_READ</td>
-                                        <td><input id="tr_nb_messages_read" type="checkbox"></td>
-                                    </tr>
-                                    <tr>
-                                        <td>NB_MESSAGES_SENT</td>
-                                        <td><input id="tr_nb_messages_send" type="checkbox"></td>
-                                    </tr>
-                                    <tr>
-                                        <td>NB_FILES_UPLOAD</td>
-                                        <td><input id="tr_nb_files_upload" type="checkbox"></td>
-                                    <tr>
-                                    <tr>
-                                        <td>NB_FILES_DOWNLOAD</td>
-                                        <td><input id="tr_nb_files_download" type="checkbox"></td>
-                                    </tr>
-                                    <tr>
-                                        <td>NB_CONNECTION_USER</td>
-                                        <td><input id="tr_nb_connection_users" type="checkbox"></td>
-                                        <td> 
-                                            <select name="nb_connection_users" style=width:100px>
-                                                <?php
-                                                require_once 'inc/accessBd.inc';
-                                                list_user();
-                                                ?>
-                                            </select> 
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>NB_MESSAGES_SENT_USER</td>
-                                        <td><input id="tr_nb_messages_sent_users" type="checkbox"></td>
-                                        <td> 
-                                            <select name="nb_messages_sent_users" style=width:100px>
-                                                <?php
-                                                require_once 'inc/accessBd.inc';
-                                                list_user();
-                                                ?>
-                                            </select> 
-                                        </td>
-
-                                    </tr>
-                                    <tr>
-                                        <td>NB_MESSAGES_READ_USER</td>
-                                        <td><input id="tr_nb_messages_read_users" type="checkbox"></td>
-                                        <td> 
-                                            <select name="nb_messages_read_users" style=width:100px>
-                                                <?php
-                                                require_once 'inc/accessBd.inc';
-                                                list_user();
-                                                ?>
-                                            </select> 
-                                        </td>
-                                    </tr>
-                                </table>
-
-                                <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" id="MyButton">
-                                    Calculer résultats
-                                </a>
-
-                            </div> 
-                        </div>
-
-                        <div class="demo-card-wide mdl-card mdl-shadow--2dp mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet">
-                            <div class="mdl-card__title">
-                                <h2 class="mdl-card__title-text">Graphique</h2>
-                            </div>
-
-                            <div class='wrapper'>
-                                <div id='container'></div>
-                            </div>
-
-                        </div>
                     </div>
+                </div>
 
+                <button id="show-dialog" class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect fab mdl-button--colored">
+                    <i class="material-icons">add</i>
+                </button>
+
+            </main>
+
+
+            <dialog class="mdl-dialog" style="width: 50%">
+                <h4 class="mdl-dialog__title">Paramètres du graphique</h4>
+                <div class="mdl-dialog__content">
+                    <table id='table_param'>  
+                        <tr ><td>
+                        <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="tr_nb_messages_read"> <input id="tr_nb_messages_read" type="checkbox" class="mdl-checkbox__input"><span class="mdl-checkbox__label">Nombre de messages lus</span>
+                        </label>
+                        </td></tr>
+                        <tr><td>
+                        <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="tr_nb_messages_send"> <input id="tr_nb_messages_send" type="checkbox" class="mdl-checkbox__input"><span class="mdl-checkbox__label">Nombre de messages envoyés</span>
+                        </label>
+                        </td></tr>
+                        <tr><td>
+                        <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="tr_nb_files_upload"> <input id="tr_nb_files_upload" type="checkbox" class="mdl-checkbox__input"><span class="mdl-checkbox__label">Nombre de fichier envoyés</span>
+                        </label>
+                        </td><tr>
+                        <tr><td>
+                        <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="tr_nb_files_download"> <input id="tr_nb_files_download" type="checkbox" class="mdl-checkbox__input"><span class="mdl-checkbox__label">Nombre de fichier téléchargés</span>
+                        </label>
+                        </td></tr>
+                        <tr>
+                            <td><label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="tr_nb_connection_users"> <input id="tr_nb_connection_users" type="checkbox" class="mdl-checkbox__input"><span class="mdl-checkbox__label">Nombre de connexion de l'utilisateur</span>
+                                </label>
+                            </td>
+                            <td> 
+                                <select name="nb_connection_users" style=width:100px>
+                                    <?php
+                                    require_once 'inc/accessBd.inc';
+                                    list_user();
+                                    ?>
+                                </select> 
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="tr_nb_messages_sent_users"> <input id="tr_nb_messages_sent_users" type="checkbox" class="mdl-checkbox__input"><span class="mdl-checkbox__label">Nombre de message envoyés par l'utilisateur</span>
+                                </label></td>
+                            <td> 
+                                <select name="nb_messages_sent_users" style=width:100px>
+                                    <?php
+                                    require_once 'inc/accessBd.inc';
+                                    list_user();
+                                    ?>
+                                </select> 
+                            </td>
+
+                        </tr>
+                        <tr>
+                            <td><label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="tr_nb_messages_read_users"> <input id="tr_nb_messages_read_users" type="checkbox" class="mdl-checkbox__input"><span class="mdl-checkbox__label">Nombre de message lus par l'utilisateur</span>
+                                </label></td>
+                            <td> 
+                                <select name="nb_messages_read_users" style=width:100px>
+                                    <?php
+                                    require_once 'inc/accessBd.inc';
+                                    list_user();
+                                    ?>
+                                </select> 
+                            </td>
+                        </tr>
+                    </table>
+                     <button class="mdl-button mdl-js-button mdl-button--raised" style="margin: 10px;" id="MyButton">
+                        Générer le graphique avec les paramètres
+                    </button>
+        
+                    
+                    <h4>Graphiques prédéfinis</h4>
+                    <button class="mdl-button mdl-js-button mdl-button--raised" style="margin: 10px;" id="MyButtongraphique_comparaison_nb_co">
+                        Comparaison nombre de connexion
+                    </button>
+                    <button class="mdl-button mdl-js-button mdl-button--raised" style="margin: 10px;" id="MyButtongraphique_comparaison_note">
+                        Comparaison des notes
+                    </button>
+                    
 
 
                 </div>
+                <div class="mdl-dialog__actions">
+                  
+                    <button type="button" class="mdl-button close">Fermer</button>
+                </div>
+            </dialog>
+            <script>
+                var dialog = document.querySelector('dialog');
+                var showDialogButton = document.querySelector('#show-dialog');
+                if (!dialog.showModal) {
+                    dialogPolyfill.registerDialog(dialog);
+                }
+                showDialogButton.addEventListener('click', function () {
+                    dialog.showModal();
+                });
+                dialog.querySelector('.close').addEventListener('click', function () {
+                    dialog.close();
+                });
+                dialog.querySelector('#MyButton').addEventListener('click', function () {
+                    dialog.close();
+                    generate_graph();
+                });
+                dialog.querySelector('#MyButtongraphique_comparaison_nb_co').addEventListener('click', function () {
+                    dialog.close();
+                    graphique_comparaison_nb_co();
+                });
+                dialog.querySelector('#MyButtongraphique_comparaison_note').addEventListener('click', function () {
+                    dialog.close();
+                    graphique_comparaison_note();
+                });
+            </script>
 
 
 
 
 
 
-
-                </body>
-                </html>
+    </body>
+</html>
