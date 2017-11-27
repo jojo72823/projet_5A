@@ -25,13 +25,21 @@ var data_indicator = new Array();
 
 var nb_graph = 0;
 
+function delete_graph(number){
+     
+    
+   alert("delete ="+number);
+   document.getElementById('card'+number).remove();
+     //document.getElementById(name).remove();
+}
 
 function add_section() {
 
     nb_graph = nb_graph + 1;
-    document.getElementById('grid_graph').innerHTML += '<div class="demo-card-wide mdl-card mdl-shadow--2dp mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet">\n\
- <div class=\'wrapper\'>\n\
- <div id=\'container' + nb_graph + '\'></div>\n\
+   
+    document.getElementById('grid_graph').innerHTML += '<div id="card'+nb_graph+'" class="demo-card-wide mdl-card mdl-shadow--2dp mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet">\n\
+ <div class=\'wrapper\'>\n\<input id="delete_button" onclick="delete_graph(\''+nb_graph+'\')"  type="image" src="images/icon_close.png" style="width: 30px;float: right;padding:5px"></input>\n\
+<div id=\'container' + nb_graph + '\'></div>\n\
  </div>\n\
  </div>\n';
 
@@ -39,8 +47,7 @@ function add_section() {
 
 function generate_graph() {
     add_section();
-    alert("get_select_indicators");
-    
+
 
     //GET USERS_INDICATORS 
     select_nb_connection_users = $('select[name=nb_connection_users]').val();
@@ -48,188 +55,163 @@ function generate_graph() {
     select_nb_messages_read_users = $('select[name=nb_messages_read_users]').val();
 
     //GET SELECT_INDICATORS
-    
-     var tableau = document.getElementById("table_param").children("tbody");
-     var checkbox = tableau.nodelist.children("tr").next("tr").childNodes;
-    
-    var selects = document.getElementById("table_param").children("tbody").children("tr").next("tr").next("tr").next("tr").next("tr").children("td").next("td").children("select");
-    
-    //var checkbox = $(this).parent().children("table").children("tbody").children("tr").children("td").next("td").children("input");
-   // var selects = $(this).parent().children("table").children("tbody").children("tr").next("tr").next("tr").next("tr").next("tr").next("tr").children("td").next("td").next("td").next("td").children("select");
-    for (var i = 0; i < selects.length; i++) {
-        var id_selected = selects[i].val();
-    }
-
     select_indicators_new.length = 0;
-    for (var i = 0; i < checkbox.length; i++) {
-        if (checkbox[i].checked) {
-            select_indicators_new.push("true");
-        } else {
-            select_indicators_new.push("false");
-        }
-    }
-    pre_print_graph();
+
+    var tr_nb_messages_read = document.getElementById('tr_nb_messages_read').checked;
+    var tr_nb_messages_send = document.getElementById('tr_nb_messages_send').checked;
+    var tr_nb_files_upload = document.getElementById('tr_nb_files_upload').checked;
+    var tr_nb_files_download = document.getElementById('tr_nb_files_download').checked;
+    var tr_nb_connection_users = document.getElementById('tr_nb_connection_users').checked;
+
+    select_indicators_new.push(tr_nb_messages_read);
+    select_indicators_new.push(tr_nb_messages_send);
+    select_indicators_new.push(tr_nb_files_upload);
+    select_indicators_new.push(tr_nb_files_download);
+    select_indicators_new.push(tr_nb_connection_users);
+    moteur_calcul_indicateur();
+
 }
 function moteur_calcul_indicateur() {
 
-
-    $.ajax({
-        url: 'php/accessFonctions.php',
-        data: {fonction: 'nb_messages_read'},
-        type: 'POST',
-        dataType: 'json',
-        success: function (objetJson) {
-            if (objetJson != null) {
-                nb_messages_read = objetJson;
-            } else {
-                alert("erreur nb_messages_read! ");
-            }
-        },
-        cache: false
-    });
-    $.ajax({
-        url: 'php/accessFonctions.php',
-        data: {fonction: 'nb_messages_sent'},
-        type: 'POST',
-        dataType: 'json',
-        success: function (objetJson) {
-            if (objetJson != null) {
-                nb_messages_send = objetJson;
-            } else {
-                alert("erreur nb_messages_sent! ");
-            }
-        },
-        cache: false
-    });
-    $.ajax({
-        url: 'php/accessFonctions.php',
-        data: {fonction: 'nb_files_upload'},
-        type: 'POST',
-        dataType: 'json',
-        success: function (objetJson) {
-            if (objetJson != null) {
-                nb_files_upload = objetJson;
-            } else {
-                alert("erreur nb_files_upload! ");
-            }
-        },
-        cache: false
-    });
-    $.ajax({
-        url: 'php/accessFonctions.php',
-        data: {fonction: 'nb_files_download'},
-        type: 'POST',
-        dataType: 'json',
-        success: function (objetJson) {
-            if (objetJson != null) {
-                nb_files_download = objetJson;
-            } else {
-                alert("erreur nb_files_download! ");
-            }
-        },
-        cache: false
-    });
-
-    //get id of user
-    $.ajax({
-        url: 'php/accessFonctions.php',
-        data: {fonction: 'get_id_user', p_name_user: select_nb_connection_users},
-        type: 'POST',
-        dataType: 'json',
-        success: function (objetJson) {
-            if (objetJson != null) {
-                id_select_nb_connection_users = objetJson;
-            } else {
-                alert("erreur nb_files_download! ");
-            }
-        },
-        cache: false
-    });
-
-    $.ajax({
-        url: 'php/accessFonctions.php',
-        data: {fonction: 'get_id_user', p_name_user: select_nb_messages_sent_users},
-        type: 'POST',
-        dataType: 'json',
-        success: function (objetJson) {
-            if (objetJson != null) {
-                id_select_nb_messages_sent_users = objetJson;
-            } else {
-                alert("erreur nb_files_download! ");
-            }
-        },
-        cache: false
-    });
-    $.ajax({
-        url: 'php/accessFonctions.php',
-        data: {fonction: 'get_id_user', p_name_user: select_nb_messages_read_users},
-        type: 'POST',
-        dataType: 'json',
-        success: function (objetJson) {
-            if (objetJson != null) {
-                id_select_nb_messages_read_users = objetJson;
-            } else {
-                alert("erreur nb_files_download! ");
-            }
-        },
-        cache: false
-    });
-
-    alert("id_recupéré");
-
-    //get indicator for user
-    $.ajax({
-        url: 'php/accessFonctions.php',
-        data: {fonction: 'nb_connection_users', p_idUser: id_select_nb_connection_users},
-        type: 'POST',
-        dataType: 'json',
-        success: function (objetJson) {
-            if (objetJson != null) {
-                nb_connection_users = objetJson;
-            } else {
-                alert("erreur nb_connection_users! ");
-            }
-        },
-        cache: false
-    });
-    $.ajax({
-        url: 'php/accessFonctions.php',
-        data: {fonction: 'nb_messages_sent_users', p_idUser: id_select_nb_messages_sent_users},
-        type: 'POST',
-        dataType: 'json',
-        success: function (objetJson) {
-            if (objetJson != null) {
-                nb_messages_sent_users = objetJson;
-            } else {
-                alert("erreur nb_messages_sent_users! ");
-            }
-        },
-        cache: false
-
-    });
-    $.ajax({
-        url: 'php/accessFonctions.php',
-        data: {fonction: 'nb_messages_read_users', p_idUser: id_select_nb_messages_read_users},
-        type: 'POST',
-        dataType: 'json',
-        success: function (objetJson) {
-            if (objetJson != null) {
-                nb_messages_read_users = objetJson;
-            } else {
-                alert("erreur nb_messages_read_users! ");
-            }
-        },
-        cache: false
-    });
+    var dfrd1 = $.Deferred();
+    setTimeout(function () {
 
 
+        $.ajax({
+            url: 'php/accessFonctions.php',
+            data: {fonction: 'nb_messages_read'},
+            type: 'POST',
+            dataType: 'json',
+            success: function (objetJson) {
+                if (objetJson != null) {
+                    nb_messages_read = objetJson;
+                    //alert("ok nb_messages_read! " + objetJson);
+                } else {
+                    alert("erreur nb_messages_read! ");
+                }
+            },
+            cache: false
+        });
 
+        $.ajax({
+            url: 'php/accessFonctions.php',
+            data: {fonction: 'nb_messages_sent'},
+            type: 'POST',
+            dataType: 'json',
+            success: function (objetJson) {
+                if (objetJson != null) {
+                    //alert("ok nb_messages_sent! " + objetJson);
+                    nb_messages_send = objetJson;
+                } else {
+                    alert("erreur nb_messages_sent! ");
+                }
+            },
+            cache: false
+        });
+
+        $.ajax({
+            url: 'php/accessFonctions.php',
+            data: {fonction: 'nb_files_upload'},
+            type: 'POST',
+            dataType: 'json',
+            success: function (objetJson) {
+                if (objetJson != null) {
+                    //alert("ok nb_files_upload! " + objetJson);
+                    nb_files_upload = objetJson;
+                } else {
+                    alert("erreur nb_files_upload! ");
+                }
+            },
+            cache: false
+        });
+
+        $.ajax({
+            url: 'php/accessFonctions.php',
+            data: {fonction: 'nb_files_download'},
+            type: 'POST',
+            dataType: 'json',
+            success: function (objetJson) {
+                if (objetJson != null) {
+                    //alert("ok nb_files_download! " + objetJson);
+                    nb_files_download = objetJson;
+                } else {
+                    alert("erreur nb_files_download! ");
+                }
+            },
+            cache: false
+        });
+
+        //get indicator for user
+        $.ajax({
+            url: 'php/accessFonctions.php',
+            data: {fonction: 'nb_connection_users', p_name_user: select_nb_connection_users},
+            type: 'POST',
+            dataType: 'json',
+            success: function (objetJson) {
+                if (objetJson != null) {
+                    nb_connection_users = objetJson;
+                } else {
+                    alert("erreur nb_connection_users! ");
+                }
+            },
+            cache: false
+        });
+        $.ajax({
+            url: 'php/accessFonctions.php',
+            data: {fonction: 'nb_messages_sent_users', p_name_user: select_nb_messages_sent_users},
+            type: 'POST',
+            dataType: 'json',
+            success: function (objetJson) {
+                if (objetJson != null) {
+                    nb_messages_sent_users = objetJson;
+                } else {
+                    alert("erreur nb_messages_sent_users! ");
+                }
+            },
+            cache: false
+
+        });
+        $.ajax({
+            url: 'php/accessFonctions.php',
+            data: {fonction: 'nb_messages_read_users', p_name_user: select_nb_messages_read_users},
+            type: 'POST',
+            dataType: 'json',
+            success: function (objetJson) {
+                if (objetJson != null) {
+                    nb_messages_read_users = objetJson;
+                } else {
+                    alert("erreur nb_messages_read_users! ");
+                }
+            },
+            cache: false
+        });
+        if (nb_messages_read == null ||
+                nb_messages_send == null ||
+                nb_files_upload == null ||
+                nb_files_download == null ||
+                nb_connection_users == null ||
+                nb_messages_sent_users == null ||
+                nb_messages_read_users == null) {
+            moteur_calcul_indicateur();
+        }else{
+            dfrd1.resolve();
+        }
+
+        
+    }, 100);
+
+    return $.when(dfrd1).done(function () {
+      
+       pre_print_graph();
+    }).promise();
 
 }
 function pre_print_graph() {
 
-    moteur_calcul_indicateur();
-    alert("wait ....moteur_calcul_indicateur");
+
+
+
+
 
     legende_print.length = 0;
     data_print.length = 0;
@@ -246,7 +228,7 @@ function pre_print_graph() {
 
     for (var cpt = 0; cpt < select_indicators.length; cpt++) {
 
-        if (select_indicators_new[cpt] == "true") {
+        if (select_indicators_new[cpt]) {
             legende_print.push(select_indicators[cpt]);
             data_print.push(data_indicator[cpt]);
         }
@@ -323,9 +305,17 @@ function graphique_comparaison_note() {
             }
         },
         series: [{
-                type: 'column',
                 name: 'Classe L2',
-                data: [20, 12, 10, 20, 13]
+				type: 'column',
+				colorByPoint: true,
+				colors: [
+                '#66ffcc',
+                '#660033',
+                '#66ffcc',
+                '#66ffcc',
+                '#66ffcc'
+            ],
+                data: [18, 12, 5, 20, 13]
             }, {max: 20,
                 type: 'spline',
                 name: 'Min',
@@ -338,7 +328,7 @@ function graphique_comparaison_note() {
             }, {max: 20,
                 type: 'spline',
                 name: 'Max',
-                data: [15, 15, 15, 15, 15],
+                data: [20, 20, 20, 20, 20],
                 marker: {
                     lineWidth: 2,
                     lineColor: Highcharts.getOptions().colors[3],

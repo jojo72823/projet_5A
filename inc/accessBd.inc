@@ -44,48 +44,54 @@ function nb_files_download() {
 }
 
 function nb_messages_sent_users($args) {
-    if (isset($args['p_idUser'])) {
-        $idUser = $args['p_idUser'];
+    if (isset($args['p_name_user'])) {
+        $name_user = $args['p_name_user'];
     }
-    $bdd = connexionBd();
-    $requete = $bdd->query("SELECT count(*) AS count FROM `tracecmc` NATURAL JOIN `action` WHERE action.type='Poster un nouveau message' AND idUser = '" . $idUser . "'");
+     $bdd = connexionBd();
+    
+    $requete = $bdd->query("SELECT idUser FROM `user` WHERE name = '" . $name_user . "'");
+    $count = $requete->fetch();
+    $count['idUser'];
+   
+    $requete = $bdd->query("SELECT count(*) AS count FROM `tracecmc` NATURAL JOIN `action` WHERE action.type='Poster un nouveau message' AND idUser = '" . $count['idUser'] . "'");
     $count = $requete->fetch();
     echo $count['count'];
     $requete->closeCursor();
 }
 
 function nb_connection_users($args) {
-    if (isset($args['p_idUser'])) {
-        $idUser = $args['p_idUser'];
+   if (isset($args['p_name_user'])) {
+        $name_user = $args['p_name_user'];
     }
-    $bdd = connexionBd();
-    $requete = $bdd->query("SELECT count(*) AS count FROM `tracecmc` NATURAL JOIN `action` WHERE action.type='Connexion' AND idUser = '" . $idUser . "'");
+     $bdd = connexionBd();
+    
+    $requete = $bdd->query("SELECT idUser FROM `user` WHERE name = '" . $name_user . "'");
+    $count = $requete->fetch();
+    $count['idUser'];
+    
+    $requete = $bdd->query("SELECT count(*) AS count FROM `tracecmc` NATURAL JOIN `action` WHERE action.type='Connexion' AND idUser = '" . $count['idUser'] . "'");
     $count = $requete->fetch();
     echo $count['count'];
     $requete->closeCursor();
 }
 
 function nb_messages_read_users($args) {
-    if (isset($args['p_idUser'])) {
-        $idUser = $args['p_idUser'];
+    if (isset($args['p_name_user'])) {
+        $name_user = $args['p_name_user'];
     }
-    $bdd = connexionBd();
-    $requete = $bdd->query("SELECT count(*) AS count FROM `tracecmc` NATURAL JOIN `action` WHERE action.type='Afficher le contenu d\'un message' AND idUser = '" . $idUser . "'");
+     $bdd = connexionBd();
+    
+    $requete = $bdd->query("SELECT idUser FROM `user` WHERE name = '" . $name_user . "'");
+    $count = $requete->fetch();
+    $count['idUser'];
+    
+    $requete = $bdd->query("SELECT count(*) AS count FROM `tracecmc` NATURAL JOIN `action` WHERE action.type='Afficher le contenu d\'un message' AND idUser = '" . $count['idUser'] . "'");
     $count = $requete->fetch();
     echo $count['count'];
     $requete->closeCursor();
 }
 
-function get_id_user($args) {
-    if (isset($args['p_name_user'])) {
-        $name_user = $args['p_name_user'];
-    }
-    $bdd = connexionBd();
-    $requete = $bdd->query("SELECT idUser FROM `user` WHERE name = '" . $name_user . "'");
-    $count = $requete->fetch();
-    echo $count['idUser'];
-    $requete->closeCursor();
-}
+
 
 function list_user() {
     

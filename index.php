@@ -29,6 +29,7 @@
         <script src="code/highcharts.js"></script>
         <script src="code/highcharts-more.js"></script>
         <script type='text/javascript' src='js/main.js'></script>
+        
         <?php
         require_once 'inc/accessBd.inc';
         ?>
@@ -185,8 +186,9 @@
                     dialog.close();
                 });
                 dialog.querySelector('#MyButton').addEventListener('click', function () {
-                    dialog.close();
+                   
                     generate_graph();
+                     dialog.close();
                 });
                 dialog.querySelector('#MyButtongraphique_comparaison_nb_co').addEventListener('click', function () {
                     dialog.close();
