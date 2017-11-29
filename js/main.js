@@ -25,20 +25,20 @@ var data_indicator = new Array();
 
 var nb_graph = 0;
 
-function delete_graph(number){
-     
-    
-   alert("delete ="+number);
-   document.getElementById('card'+number).remove();
-     //document.getElementById(name).remove();
+function delete_graph(number) {
+
+
+    alert("delete =" + number);
+    document.getElementById('card' + number).remove();
+    //document.getElementById(name).remove();
 }
 
 function add_section() {
 
     nb_graph = nb_graph + 1;
-   
-    document.getElementById('grid_graph').innerHTML += '<div id="card'+nb_graph+'" class="demo-card-wide mdl-card mdl-shadow--2dp mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet">\n\
- <div class=\'wrapper\'>\n\<input id="delete_button" onclick="delete_graph(\''+nb_graph+'\')"  type="image" src="images/icon_close.png" style="width: 30px;float: right;padding:5px"></input>\n\
+
+    document.getElementById('grid_graph').innerHTML += '<div id="card' + nb_graph + '" class="demo-card-wide mdl-card mdl-shadow--2dp mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet">\n\
+ <div class=\'wrapper\'>\n\<input id="delete_button" onclick="delete_graph(\'' + nb_graph + '\')"  type="image" src="images/icon_close.png" style="width: 30px;float: right;padding:5px"></input>\n\
 <div id=\'container' + nb_graph + '\'></div>\n\
  </div>\n\
  </div>\n';
@@ -62,12 +62,18 @@ function generate_graph() {
     var tr_nb_files_upload = document.getElementById('tr_nb_files_upload').checked;
     var tr_nb_files_download = document.getElementById('tr_nb_files_download').checked;
     var tr_nb_connection_users = document.getElementById('tr_nb_connection_users').checked;
-
+    var tr_nb_messages_sent_users = document.getElementById('tr_nb_messages_sent_users').checked;
+    var tr_nb_messages_read_users = document.getElementById('tr_nb_messages_read_users').checked;
+    
+    
     select_indicators_new.push(tr_nb_messages_read);
     select_indicators_new.push(tr_nb_messages_send);
     select_indicators_new.push(tr_nb_files_upload);
     select_indicators_new.push(tr_nb_files_download);
     select_indicators_new.push(tr_nb_connection_users);
+    select_indicators_new.push(tr_nb_messages_sent_users);
+    select_indicators_new.push(tr_nb_messages_read_users);
+    
     moteur_calcul_indicateur();
 
 }
@@ -193,16 +199,16 @@ function moteur_calcul_indicateur() {
                 nb_messages_sent_users == null ||
                 nb_messages_read_users == null) {
             moteur_calcul_indicateur();
-        }else{
+        } else {
             dfrd1.resolve();
         }
 
-        
+
     }, 100);
 
     return $.when(dfrd1).done(function () {
-      
-       pre_print_graph();
+
+        pre_print_graph();
     }).promise();
 
 }
@@ -306,15 +312,15 @@ function graphique_comparaison_note() {
         },
         series: [{
                 name: 'Classe L2',
-				type: 'column',
-				colorByPoint: true,
-				colors: [
-                '#66ffcc',
-                '#660033',
-                '#66ffcc',
-                '#66ffcc',
-                '#66ffcc'
-            ],
+                type: 'column',
+                colorByPoint: true,
+                colors: [
+                    '#66ffcc',
+                    '#660033',
+                    '#66ffcc',
+                    '#66ffcc',
+                    '#66ffcc'
+                ],
                 data: [18, 12, 5, 20, 13]
             }, {max: 20,
                 type: 'spline',
