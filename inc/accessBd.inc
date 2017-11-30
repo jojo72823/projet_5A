@@ -190,5 +190,13 @@ function list_user() {
         echo ' <option id=' . $donnees['idUser'] . ' selected=\'selected\'>' . $donnees['name'] . '</option>';
     }
 }
+
+function list_forum(){
+    $bdd = connexionBd();
+    $requete = $bdd->query('SELECT DISTINCT CAST(SUBSTRING_INDEX(SUBSTRING_INDEX(Title,",",1),"=",-1) AS Unsigned) AS idForum FROM `attributes` WHERE Title LIKE "IDForum%" ORDER BY idForum ASC');
+    while ($donnees = $requete->fetch()) {
+        echo ' <option id=' . $donnees['idForum'] . ' selected=\'selected\'>' . $donnees['idForum'] . '</option>';
+    }
+}
 ?>
 
