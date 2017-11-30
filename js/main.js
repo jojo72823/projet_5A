@@ -1,4 +1,4 @@
-var select_indicators = ["nb_messages_read", "nb_messages_sent", "nb_files_upload", "nb_files_download", "nb_connection_user", "nb_mess_sent_user", "nb_mess_read_user"];
+var select_indicators = ["nb_messages_read", "nb_messages_sent", "nb_files_upload", "nb_files_download", "nb_connection_user", "nb_mess_sent_user", "nb_mess_read_user", "nb_files_upload_user", "nb_files_download_user"];
 var select_indicators_new = new Array();
 var count = 0;
 var data_print = new Array();
@@ -13,13 +13,19 @@ var nb_files_download;
 var nb_messages_sent_users;
 var nb_connection_users;
 var nb_messages_read_users;
+var nb_files_upload_users;
+var nb_files_download_users;
 var select_nb_connection_users;
 var select_nb_messages_sent_users;
 var select_nb_messages_read_users;
+var select_nb_files_upload_users;
+var select_nb_files_download_users;
 
 var id_select_nb_connection_users;
 var id_select_nb_messages_sent_users;
 var id_select_nb_messages_read_users;
+var id_select_nb_files_upload_users;
+var id_select_nb_files_download_users;
 
 var data_indicator = new Array();
 
@@ -53,7 +59,9 @@ function generate_graph() {
     select_nb_connection_users = $('select[name=nb_connection_users]').val();
     select_nb_messages_sent_users = $('select[name=nb_messages_sent_users]').val();
     select_nb_messages_read_users = $('select[name=nb_messages_read_users]').val();
-
+    select_nb_files_upload_users = $('select[name=nb_files_upload_users]').val();
+    select_nb_files_download_users = $('select[name=nb_files_download_users]').val();
+    
     //GET SELECT_INDICATORS
     select_indicators_new.length = 0;
 
@@ -64,6 +72,8 @@ function generate_graph() {
     var tr_nb_connection_users = document.getElementById('tr_nb_connection_users').checked;
     var tr_nb_messages_sent_users = document.getElementById('tr_nb_messages_sent_users').checked;
     var tr_nb_messages_read_users = document.getElementById('tr_nb_messages_read_users').checked;
+    var tr_nb_files_upload_users = document.getElementById('tr_nb_files_upload_users').checked;
+    var tr_nb_files_download_users = document.getElementById('tr_nb_files_download_users').checked;
     
     
     select_indicators_new.push(tr_nb_messages_read);
@@ -73,6 +83,8 @@ function generate_graph() {
     select_indicators_new.push(tr_nb_connection_users);
     select_indicators_new.push(tr_nb_messages_sent_users);
     select_indicators_new.push(tr_nb_messages_read_users);
+    select_indicators_new.push(tr_nb_files_upload_users);
+    select_indicators_new.push(tr_nb_files_download_users);
     
     moteur_calcul_indicateur();
 
@@ -191,13 +203,43 @@ function moteur_calcul_indicateur() {
             },
             cache: false
         });
+        $.ajax({
+            url: 'php/accessFonctions.php',
+            data: {fonction: 'nb_files_upload_users', p_name_user: select_nb_files_upload_users},
+            type: 'POST',
+            dataType: 'json',
+            success: function (objetJson) {
+                if (objetJson != null) {
+                    nb_files_upload_users = objetJson;
+                } else {
+                    alert("erreur nb_files_upload_users! ");
+                }
+            },
+            cache: false
+        });
+        $.ajax({
+            url: 'php/accessFonctions.php',
+            data: {fonction: 'nb_files_download_users', p_name_user: select_nb_files_download_users},
+            type: 'POST',
+            dataType: 'json',
+            success: function (objetJson) {
+                if (objetJson != null) {
+                    nb_files_download_users = objetJson;
+                } else {
+                    alert("erreur nb_files_download_users! ");
+                }
+            },
+            cache: false
+        });
         if (nb_messages_read == null ||
                 nb_messages_send == null ||
                 nb_files_upload == null ||
                 nb_files_download == null ||
                 nb_connection_users == null ||
                 nb_messages_sent_users == null ||
-                nb_messages_read_users == null) {
+                nb_messages_read_users == null ||
+                nb_files_upload_users == null ||
+                nb_files_download_users == null) {
             moteur_calcul_indicateur();
         } else {
             dfrd1.resolve();
@@ -231,6 +273,9 @@ function pre_print_graph() {
     data_indicator.push(nb_connection_users);
     data_indicator.push(nb_messages_sent_users);
     data_indicator.push(nb_messages_read_users);
+    data_indicator.push(nb_files_upload_users);
+    data_indicator.push(nb_files_download_users);
+    
 
     for (var cpt = 0; cpt < select_indicators.length; cpt++) {
 
