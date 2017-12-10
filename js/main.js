@@ -24,11 +24,38 @@ var id_select_nb_messages_read_users;
 var data_indicator = new Array();
 
 var nb_graph = 0;
+var nb_filter = 0;
+
+window.onload = function () {
+    document.getElementById("search_input").focus();
+};
+
+function readSearchInput(el, e) {
+    console.log(e)
+    if (e.keyCode == 13) {//touche entrée
+        var value = document.getElementById('search_input').value;
+        nb_filter++;
+        document.getElementById('filter_bar').innerHTML +=
+                '<div id=filter' + nb_filter + '>\n\
+                    <span class=\"mdl-chip mdl-chip--deletable\">\n\
+                        <span class=\"mdl-chip__text\">' + value + '</span>\n\
+                        <button onclick="delete_filter(\'' + nb_filter + '\') "type=\"button\" class=\"mdl-chip__action\">\n\
+                            <i class=\"material-icons\">cancel</i>\n\
+                        </button>\n\
+                    </span>\n\
+                </div>'
+    }
+    return false;
+}
+
+
+function delete_filter(number) {
+    document.getElementById('filter' + number).remove();
+}
+
 
 function delete_graph(number) {
 
-
-    alert("delete =" + number);
     document.getElementById('card' + number).remove();
     //document.getElementById(name).remove();
 }
@@ -37,13 +64,15 @@ function add_section() {
 
     nb_graph = nb_graph + 1;
 
-    document.getElementById('grid_graph').innerHTML += '<div id="card' + nb_graph + '" class="demo-card-wide mdl-card mdl-shadow--2dp mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet">\n\
+    document.getElementById('grid_graph').innerHTML += '<div id="card' + nb_graph + '" class="gmd-3 demo-card-wide mdl-card mdl-shadow--5dp mdl-cell mdl-cell--6-col mdl-cell--10-col-tablet mdl-cell--12-col-phone">\n\
  <div class=\'wrapper\'>\n\<input id="delete_button" onclick="delete_graph(\'' + nb_graph + '\')"  type="image" src="images/icon_close.png" style="width: 30px;float: right;padding:5px"></input>\n\
 <div id=\'container' + nb_graph + '\'></div>\n\
  </div>\n\
- </div>\n';
+ </div>\n<script src=\"http://marcojakob.github.io/dart-dnd/simple-sortable/web/example.dart.js\"></script><script src=\"js/drag_and_drop/dart.js\"></script>';
 
 }
+
+
 
 function generate_graph() {
     add_section();
@@ -64,8 +93,8 @@ function generate_graph() {
     var tr_nb_connection_users = document.getElementById('tr_nb_connection_users').checked;
     var tr_nb_messages_sent_users = document.getElementById('tr_nb_messages_sent_users').checked;
     var tr_nb_messages_read_users = document.getElementById('tr_nb_messages_read_users').checked;
-    
-    
+
+
     select_indicators_new.push(tr_nb_messages_read);
     select_indicators_new.push(tr_nb_messages_send);
     select_indicators_new.push(tr_nb_files_upload);
@@ -73,7 +102,7 @@ function generate_graph() {
     select_indicators_new.push(tr_nb_connection_users);
     select_indicators_new.push(tr_nb_messages_sent_users);
     select_indicators_new.push(tr_nb_messages_read_users);
-    
+
     moteur_calcul_indicateur();
 
 }
@@ -214,11 +243,6 @@ function moteur_calcul_indicateur() {
 }
 function pre_print_graph() {
 
-
-
-
-
-
     legende_print.length = 0;
     data_print.length = 0;
     data_indicator.length = 0;
@@ -301,7 +325,6 @@ function graphique_comparaison_note() {
             categories: ['élève 1', 'élève 2', 'élève 3', 'élève 4', 'élève 5'],
         },
         labels: {
-
         },
         yAxis: {
             min: 0,
